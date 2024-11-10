@@ -1,0 +1,13 @@
+{
+    "name": "System Design",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+        "ms-vscode.cpptools-extension-pack",
+        "ckolkman.vscode-postgres"
+    ]
+}

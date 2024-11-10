@@ -1,0 +1,41 @@
+version: '2.3'
+
+services:
+  postgres:
+        container_name: service-postgres
+        image: postgres:12
+        environment: &db_env
+          POSTGRES_DB: pg_service_template_db_1
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432
+        volumes:
+          - ../postgresql/schemas:/docker-entrypoint-initdb.d
+          - ../.pgdata:/var/lib/postgresql/data
+        networks:
+          - userver_network
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    privileged: true
+    environment:
+          <<: *db_env
+          PREFIX: ${PREFIX:-~/.local}
+          CCACHE_DIR: /.ccache
+          CORES_DIR: /cores
+    networks:
+      - userver_network
+    volumes:
+      - ..:/workspace:rw
+      - ${TC_CORES_DIR:-./.cores}:/cores:rw
+    depends_on:
+          - postgres
+    ports:
+      - 8080:8080
+
+
+
+networks:
+  userver_network:
